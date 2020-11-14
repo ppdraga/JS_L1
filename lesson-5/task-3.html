@@ -1,0 +1,52 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  
+  <title>Document</title>
+
+
+  
+</head>
+<body>
+    <div id='catalog' class="alert alert-light" role="alert">Catalog</div>
+    <script>
+     
+        
+            var products = [
+                {   
+                    name: 'Prod1',
+                    description: 'Prod1 desc',
+                    price: 1000
+                },
+                {
+                    name: 'Prod2',
+                    description: 'Prod2 desc',
+                    price: 500
+                },
+                {
+                    name: 'Prod3',
+                    description: 'Prod3 desc',
+                    price: 1500
+                }
+            ]
+
+            var $catalog = document.getElementById("catalog");
+            
+            for (var i = 0; i < products.length; i++) {
+                var $entry = document.createElement("p");
+                $entry.textContent = products[i].name;
+                $entry.classList.add("alert", "alert-dark");
+                $catalog.appendChild($entry);
+            }
+            
+  </script>
+
+
+</body>
+</html>
