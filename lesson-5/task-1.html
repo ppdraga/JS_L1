@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+	table {border-collapse: collapse;}
+	table, th, td { border: 1px solid black;}
+	.white {background-color: white; width: 20px; height: 20px;}
+	.black {background-color: black; width: 20px; height: 20px;}
+	.center {text-align: center}
+	
+  </style>
+  
+  
+</head>
+<body>
+  <script>
+     var table = document.createElement("table");
+     for (var i = 0; i < 9; i++) {
+    	var tr = document.createElement('tr');
+        for (var j = 0; j < 9; j++) {
+            var td = document.createElement('td');
+         
+            if (i % 2 == j % 2 || i == 0 || j == 0) {
+                    td.className = "white";
+                if (i == 0 && j != 0) { td.innerHTML = String.fromCharCode(64 + j) }
+                if (i != 0 && j == 0) { td.innerHTML = i }
+                td.classList.add("center");
+            } else {
+                    td.className = "black";
+            }
+        
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+    document.body.appendChild(table);
+    </script>
+
+
+</body>
+</html>
