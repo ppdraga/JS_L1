@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='catalog' class="alert alert-light col-6" role="alert">Catalog</div>
+  <div id='cartTableTemplate' class="d-none">
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Product</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+<div class="accordion col-md-8 col-sm-12" id="accordionExample">
+
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Корзина
+        </button>
+      </h2>
+    </div>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <div id='cartTable' class='px-2'></div>
+	      <div id='cart' class="alert alert-info col-8 mx-2" role="alert">Cart</div>
+        <button id="btn-collapse-1-2" class="btn btn-link" type="button" data-toggle="next" data-target="#collapseOne" data-target2="#collapseTwo">Далее</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Адрес
+        </button>
+      </h2>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <label for="inputCity">Город:</label>
+            <input type="text" id="exampleInputCity" class="form-control" placeholder="Москва">
+          </div>
+          <div class="form-group">
+            <label for="inputAddress">Адрес:</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="метро, улица, дом, корпус, кв">
+          </div>
+	      </form>
+        <button class="btn btn-link" type="button" data-toggle="next" data-target="#collapseTwo" data-target2="#collapseThree">Далее</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Комментарий
+        </button>
+      </h2>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+        </form>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">При необходимости укажите дополнительную информацию к заказу:</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
+        </form>
+        <button class="btn btn-link" type="button" data-toggle="none" data-target="#collapseThree">Далее</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+
+function init() {
+    var $buttons = document.querySelectorAll("#catalog button");
+    //console.log($buttons);
+    for (let i = 0; i < $buttons.length; i++) {
+        $buttons[i].addEventListener('click', handleButtonClick);
+    }
+    //cartRefrash();
+    var $buttonsCollapse = document.querySelectorAll("#accordionExample button.btn-link");
+    console.log($buttonsCollapse);
+    for (let i = 0; i < $buttonsCollapse.length; i++) {
+        $buttonsCollapse[i].addEventListener('click', handleButtonCollapseClick);
+    }
+}
+	
+function initCartRowElements() {
+    var $deleteCartRowButtons = document.querySelectorAll("#cartTable button");
+    //console.log($deleteCartRowButtons);
+    for (let i = 0; i < $deleteCartRowButtons.length; i++) {
+        $deleteCartRowButtons[i].addEventListener('click', handleDeleteCartRowButtonClick);
+    }
+    var $inputCartQuantityFields = document.querySelectorAll("#cartTable input");
+    for (let i = 0; i < $inputCartQuantityFields.length; i++) {
+        $inputCartQuantityFields[i].addEventListener('change', handleInputCartQuantityFieldChange);
+    }
+}
+
+function handleInputCartQuantityFieldChange(event) {
+    //console.log(event.target.dataset.target);
+    //console.log(event.target.value);
+    var productCartIndex = event.target.dataset.target;
+    var productCartNewQuantity = event.target.value;
+    cart.products[productCartIndex].quantity = parseInt(productCartNewQuantity);
+    cartRefrash(); 
+}
+	
+function handleDeleteCartRowButtonClick(event) {
+    console.log(event.target.dataset.target);
+    cart.products.splice(event.target.dataset.target, 1);
+    console.log(cart);
+    cartRefrash(); 
+}
+
+function handleButtonCollapseClick(event) {
+    console.log(event.target.dataset);
+    var $divCollapse = document.querySelector(event.target.dataset.target);
+    console.log($divCollapse);
+    $divCollapse.classList.toggle("show");
+	  if (event.target.dataset.toggle == "next") {
+        var $divCollapse2 = document.querySelector(event.target.dataset.target2);
+        $divCollapse2.classList.toggle("show");
+    }
+}
+
+function handleButtonClick(event) {
+    var ProdID = event.target.id.split( "_" )[1];
+    var productsInCart = new Array;
+    for (let i = 0; i < cart.products.length; i++) {
+        productsInCart.push(cart.products[i].product)
+    }
+    var index = productsInCart.indexOf(products[ProdID]);
+    if (index == -1) {
+        cart.products.push({
+            product: products[ProdID],
+            quantity: 1,
+            price: products[ProdID].price
+        })
+    } else {
+        cart.products[index].quantity += 1;
+    }
+    cartRefrash();
+}
+
+var products = [
+    {
+        name: 'Prod1',
+        description: 'Prod1 desc',
+        price: 1000
+    },
+    {
+        name: 'Prod2',
+        description: 'Prod2 desc',
+        price: 500
+    },
+    {
+        name: 'Prod3',
+        description: 'Prod3 desc',
+        price: 1500
+    }
+]
+ 
+var $catalog = document.getElementById("catalog");
+for (let i = 0; i < products.length; i++) {
+    let $entry = document.createElement("p");
+    let $button = document.createElement("button");
+    $button.classList.add("btn", "btn-danger", "text-right");
+    $button.textContent = 'Купить';
+    $button.setAttribute( "id" , "BtnProduct_" + i );
+    $entry.textContent = products[i].name + " " + products[i].price + " руб";
+    $entry.classList.add("alert", "alert-dark", "d-flex", "justify-content-between");
+    $catalog.appendChild($entry);
+    $entry.appendChild($button);
+}
+
+var cart = {
+    products: [
+        {
+            product: products[0],
+            quantity: 2,
+            price: products[0].price
+        },
+        {
+            product: products[1],
+            quantity: 3,
+            price: products[1].price
+        },
+    ],
+    countBasketPrice: function() {
+        let result = 0;
+        for (i in this.products) {
+            result += this.products[i].quantity * this.products[i].price;
+        }
+        return result;
+    },
+    countBasketTotal: function() {
+        let result = 0;
+        for (i in this.products) {
+            result += this.products[i].quantity;
+        }
+        return result;
+    }
+}
+ 
+function cartRefrash() {
+    var $cart = document.getElementById("cart");
+    if (cart.products.length > 0) {
+        var $cartTable = document.getElementById("cartTableTemplate").childNodes[1].cloneNode(true);    
+        var $tbody = $cartTable.childNodes[3];
+        for (let i = 0; i < cart.products.length; i++) {
+            var $tr = document.createElement("tr");
+            var $th = document.createElement("th");
+            $th.setAttribute( "scope" , "row" );
+            $th.textContent = i + 1;
+            $tr.appendChild($th);
+            var $td = document.createElement("td");
+            $td.textContent = cart.products[i].product.name;
+            $tr.appendChild($td); 
+            var $td = document.createElement("td");
+            $td.classList.add("d-flex");
+            $td.innerHTML = "<input class='form-control col-6' type='number' data-target=" + i + " value=" + cart.products[i].quantity + ">";
+            $td.innerHTML += "<button type='button' class='btn btn-outline-dark ml-2' data-target=" + i + ">Delete</button>";
+            //$td.textContent = cart.products[i].quantity;
+            $tr.appendChild($td); 
+            var $td = document.createElement("td");
+            $td.textContent = cart.products[i].price;
+            $tr.appendChild($td); 
+            $tbody.appendChild($tr);                
+            //console.log($tbody);
+        }
+        var $cartTableDiv = document.getElementById("cartTable");
+        $cartTableDiv.innerHTML = "";
+        $cartTableDiv.appendChild($cartTable);
+        initCartRowElements();
+        $cart.textContent = "В корзине: " + cart.countBasketTotal() + " товаров на сумму " + cart.countBasketPrice() + " рублей.";
+    } else {
+        $cart.textContent = "Корзина пуста";
+        var $cartTableDiv = document.getElementById("cartTable");
+        $cartTableDiv.innerHTML = "";
+    }
+}
+   
+cartRefrash();
+window.addEventListener('load', init);
+  
+</script>
+
+</body>
+</html>
