@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  
+  <title>Document</title>
+  
+</head>
+<body>
+    <div id='catalog' class="alert alert-light col-4" role="alert">Catalog</div>
+    <div id='cart' class="alert alert-info col-4" role="alert">Cart</div>
+
+    <script>
+        function init() {
+            var $buttons = document.querySelectorAll("#catalog button");
+            console.log($buttons);
+            for (let i = 0; i < $buttons.length; i++) {
+                $buttons[i].addEventListener('click', handleButtonClick);
+            }
+        }
+
+        function handleButtonClick(event) {
+            var ProdID = event.target.id.split( "_" )[1];
+            var productsInCart = new Array;
+            for (let i = 0; i < cart.products.length; i++) {
+                productsInCart.push(cart.products[i].product)
+            }
+            var index = productsInCart.indexOf(products[ProdID]);
+            if (index == -1)
+                cart.products.push({
+                    product: products[ProdID],
+                    quantity: 1,
+                    price: products[ProdID].price
+                })
+            else {
+                cart.products[index].quantity += 1;
+            }
+            cartRefrash();
+        }
+
+        var products = [
+                {   
+                    name: 'Prod1',
+                    description: 'Prod1 desc',
+                    price: 1000
+                },
+                {
+                    name: 'Prod2',
+                    description: 'Prod2 desc',
+                    price: 500
+                },
+                {
+                    name: 'Prod3',
+                    description: 'Prod3 desc',
+                    price: 1500
+                }
+            ]
+
+        var $catalog = document.getElementById("catalog");
+        
+        for (let i = 0; i < products.length; i++) {
+            var $entry = document.createElement("p");
+            var $button = document.createElement("button");
+            $button.classList.add("btn", "btn-danger", "text-right");
+            $button.textContent = 'Купить';
+            $button.setAttribute( "id" , "BtnProduct_" + i );
+            $entry.textContent = products[i].name;
+            $entry.classList.add("alert", "alert-dark", "d-flex", "justify-content-between");
+            $catalog.appendChild($entry);
+            $entry.appendChild($button);
+        }
+
+        var cart = {
+            products: [
+                {
+                    product: products[0],
+                    quantity: 2,
+                    price: products[0].price
+                },
+                {
+                    product: products[1],
+                    quantity: 3,
+                    price: products[1].price
+                },
+            ],
+            countBasketPrice: function() {
+                var result = 0;
+                for (let i in this.products) {
+                    result += this.products[i].quantity * this.products[i].price;
+                }
+                return result;
+            },
+            countBasketTotal: function() {
+                var result = 0;
+                for (let i in this.products) {
+                    result += this.products[i].quantity;
+                }
+                return result;
+            }
+        } 
+
+    function cartRefrash() {
+        var $cart = document.getElementById("cart");
+        if (cart.products.length > 0) {
+            $cart.textContent = "В корзине: " + cart.countBasketTotal() + " товаров на сумму " + cart.countBasketPrice() + " рублей.";
+        } else {
+            $cart.textContent = "Корзина пуста";
+        }
+    }
+    
+    cartRefrash();
+
+    window.addEventListener('load', init);
+            
+  </script>
+</body>
+</html>
